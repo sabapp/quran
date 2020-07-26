@@ -23,7 +23,6 @@ class ReciterType(models.Model):
     mode = models.IntegerField(null=True, blank=True, choices=MODE_CHOICES, default=0)
 
 
-
 class Reciter(models.Model):
     r_id = models.IntegerField()
     r_img = models.CharField(max_length=500, verbose_name='تصویر')
@@ -45,4 +44,5 @@ class Reciter(models.Model):
     r_type = models.IntegerField(null=True, blank=True, choices=TYPE_CHOICES, default=1)
     r_ord = models.IntegerField(null=True, blank=True)
     r_mode = models.IntegerField(null=True, blank=True, choices=MODE_CHOICES, default=0)
-    mm_mode = models.ManyToManyField(ReciterType)
+    r_create = models.DateTimeField(editable=False, auto_now_add=True)
+    r_update = models.DateTimeField(auto_now=True)
