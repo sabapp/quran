@@ -6,6 +6,7 @@ from quran.models import *
 
 @admin.register(Reciter)
 class reciterAdmin(admin.ModelAdmin):
+    # list_display = ['id', 'r_nameFA', 'r_type', 'r_mode']
     list_display = ['id', 'r_nameFA', 'r_type', 'r_mode', 'r_create', 'r_update']
     # fieldsets = (
     #     (None, {'fields': ('r_nameAR', 'r_nameEN', 'r_nameFA')}),
