@@ -4,6 +4,11 @@ from django.contrib import admin
 from quran.models import *
 
 
+@admin.register(TafTar)
+class TafTarAdmin(admin.ModelAdmin):
+    list_display = ['title','db_name', 'type', 'mode', 'create', 'update', 'order', 'reciter_id']
+
+
 @admin.register(Reciter)
 class reciterAdmin(admin.ModelAdmin):
     # list_display = ['id', 'r_nameFA', 'r_type', 'r_mode']
@@ -15,7 +20,3 @@ class reciterAdmin(admin.ModelAdmin):
     #     ('Names3', {'fields': ('r_url3','r_size3', 'r_quality3')}),
     # )
 
-
-@admin.register(ReciterType)
-class reciteTypeAdmin(admin.ModelAdmin):
-    list_display = ['mode']

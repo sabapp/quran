@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+from rest_framework.serializers import ModelSerializer
+
 MODE_CHOICES = (
     (-1, 'Translate'),
     (0, 'Tartil'),
@@ -11,16 +13,22 @@ MODE_CHOICES = (
 )
 
 TYPE_CHOICES = (
-    (-1, 'Deleted'),
-    (1, 'Show'),
+    (-1, 'Disable'),
+    (1, 'Quran'),
     (2, 'Translate'),
     (3, 'Tafsir'),
     (4, 'WORD'),
 )
 
+TAFTAR_TYPE_CHOICES = (
+    (1, 'Tarjome'),
+    (2, 'Tafsir'),
 
-class ReciterType(models.Model):
-    mode = models.IntegerField(null=True, blank=True, choices=MODE_CHOICES, default=0)
+)
+TAFTAR_MODE_CHOICES = (
+    (-1, 'Disable'),
+    (1, 'Enable'),
+)
 
 
 class Reciter(models.Model):
@@ -46,3 +54,15 @@ class Reciter(models.Model):
     r_mode = models.IntegerField(null=True, blank=True, choices=MODE_CHOICES, default=0)
     r_create = models.DateTimeField(editable=False, auto_now_add=True)
     r_update = models.DateTimeField(auto_now=True)
+
+
+class TafTar(models.Model):
+    type = models.IntegerField(null=False, blank=False, choices=TAFTAR_TYPE_CHOICES)
+    mode = models.IntegerField(null=False, blank=False, choices=TAFTAR_MODE_CHOICES, default=1)
+    title = models.CharField(max_length=500, null=False, blank=False)
+    db_name = models.CharField(max_length=100, null=False, blank=False)
+    reciter_id = models.IntegerField(null=True, blank=False, default=0)
+    version = models.IntegerField(null=True, blank=False, default=1)
+    order = models.IntegerField(null=False, blank=False, default=1)
+    create = models.DateTimeField(editable=False, auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)

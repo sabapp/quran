@@ -4,10 +4,10 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
-from quran.models import Reciter
+from quran.models import Reciter, TafTar
 
 
-class AllRecitersAPIView(APIView):
+class GetAllRecitersAPIView(APIView):
 
     def get(self, request, format=None):
         try:
@@ -42,12 +42,45 @@ class AllRecitersAPIView(APIView):
             return Response({'status': "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class LastUpdateAPIView(APIView):
+class ReciterLastUpdateAPIView(APIView):
 
     def get(self, request, format=None):
         try:
             from django.db.models import Max
             serverLast = Reciter.objects.aggregate(Max('r_update')).get('r_update__max').strftime('%Y-%m-%d %H:%M')
+            return Response(serverLast, status=status.HTTP_200_OK)
+        except:
+            return Response({'status': "my Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class GetAllTafTarTextAPIView(APIView):
+
+    def get(self, request, format=None):
+        try:
+            all_text = TafTar.objects.order_by('order')
+            data = []
+            for texts in all_text:
+                data.append({
+                    "type": texts.type,
+                    "mode": texts.mode,
+                    "title": texts.title,
+                    "db_name": texts.db_name,
+                    "reciter_id": texts.reciter_id,
+                    "version": texts.version,
+                    "order": texts.order,
+
+                })
+            return Response({'data': data}, status=status.HTTP_200_OK)
+        except:
+            return Response({'status': "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class TafTarLastUpdateAPIView(APIView):
+
+    def get(self, request, format=None):
+        try:
+            from django.db.models import Max
+            serverLast = TafTar.objects.aggregate(Max('update')).get('update__max').strftime('%Y-%m-%d %H:%M')
             return Response(serverLast, status=status.HTTP_200_OK)
         except:
             return Response({'status': "my Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
