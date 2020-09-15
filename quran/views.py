@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
-from quran.models import Reciter, TafTar
+from quran.models import Reciter, TafTar, Counter
 
 
 class GetAllRecitersAPIView(APIView):
@@ -63,13 +63,16 @@ class GetAllTafTarTextAPIView(APIView):
                 data.append({
                     "type": texts.type,
                     "mode": texts.mode,
-                    "title": texts.title,
+                    "titleFA": texts.titleFA,
+                    "titleEN": texts.titleEN,
+                    "titleAR": texts.titleAR,
                     "db_name": texts.db_name,
                     "reciter_id": texts.reciter_id,
                     "version": texts.version,
                     "order": texts.order,
 
                 })
+
             return Response({'data': data}, status=status.HTTP_200_OK)
         except:
             return Response({'status': "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -79,6 +82,9 @@ class TafTarLastUpdateAPIView(APIView):
 
     def get(self, request, format=None):
         try:
+            p = Counter(type=1, count=1)
+            p.save()
+
             from django.db.models import Max
             serverLast = TafTar.objects.aggregate(Max('update')).get('update__max').strftime('%Y-%m-%d %H:%M')
             return Response(serverLast, status=status.HTTP_200_OK)

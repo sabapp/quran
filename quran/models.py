@@ -30,6 +30,11 @@ TAFTAR_MODE_CHOICES = (
     (1, 'Enable'),
 )
 
+COUNTER_TYPE_CHOICES = (
+    (1, 'TAFTAR'),
+    (2, 'RECITER'),
+)
+
 
 class Reciter(models.Model):
     r_id = models.IntegerField()
@@ -59,10 +64,17 @@ class Reciter(models.Model):
 class TafTar(models.Model):
     type = models.IntegerField(null=False, blank=False, choices=TAFTAR_TYPE_CHOICES)
     mode = models.IntegerField(null=False, blank=False, choices=TAFTAR_MODE_CHOICES, default=1)
-    title = models.CharField(max_length=500, null=False, blank=False)
+    titleFA = models.CharField(max_length=500, null=True, blank=True)
+    titleEN = models.CharField(max_length=500, null=True, blank=True)
+    titleAR = models.CharField(max_length=500, null=True, blank=True)
     db_name = models.CharField(max_length=100, null=False, blank=False)
     reciter_id = models.IntegerField(null=True, blank=False, default=0)
     version = models.IntegerField(null=True, blank=False, default=1)
     order = models.IntegerField(null=False, blank=False, default=1)
     create = models.DateTimeField(editable=False, auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
+
+
+class Counter(models.Model):
+    type = models.IntegerField(null=False, blank=False, choices=COUNTER_TYPE_CHOICES)
+    count = models.IntegerField(null=False, blank=False)
